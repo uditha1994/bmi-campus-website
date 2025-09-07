@@ -1,0 +1,152 @@
+.contact {
+    padding-top: 80px;
+}
+
+.contact-hero {
+    padding: 100px 0 50px;
+    text-align: center;
+}
+
+.contact-content h1 {
+    font-size: 3.5rem;
+    margin-bottom: 2rem;
+}
+
+.contact-intro {
+    font-size: 1.3rem;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.contact-main {
+    padding: 50px 0 100px;
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+}
+
+.contact-info h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: #667eea;
+}
+
+.info-items {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.info-icon {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    padding: 1rem;
+    border-radius: 12px;
+    color: white;
+    flex-shrink: 0;
+}
+
+.info-text h4 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #667eea;
+}
+
+.info-text p {
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.5;
+}
+
+.contact-form {
+    padding: 2rem;
+}
+
+.contact-form h3 {
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    color: #667eea;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 1rem 2rem;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+}
+
+@media (max-width: 768px) {
+    .contact-content h1 {
+        font-size: 2.5rem;
+    }
+
+    .contact-intro {
+        font-size: 1.1rem;
+    }
+
+    .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .contact-info h2 {
+        font-size: 2rem;
+    }
+
+    .info-items {
+        gap: 1.5rem;
+    }
+}
