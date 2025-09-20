@@ -63,34 +63,34 @@ export const generatePlagiarismReport = async (results) => {
     pdf.setFontSize(10)
     yPosition = addText(`Document: ${results.checkedContent}`, 20, yPosition, pageWidth - 40)
     yPosition = addText(`Word Count: ${results.wordCount.toLocaleString()}`, 20, yPosition, pageWidth - 40)
-    yPosition = addText(`Sources Found: ${results.sources.length}`, 20, yPosition, pageWidth - 40)
+    // yPosition = addText(`Sources Found: ${results.sources.length}`, 20, yPosition, pageWidth - 40)
     yPosition += 15
 
     // Sources Section
-    if (results.sources.length > 0) {
-        pdf.setFontSize(14)
-        pdf.text('Matching Sources', 20, yPosition)
-        yPosition += 10
+    // if (results.sources.length > 0) {
+    //     pdf.setFontSize(14)
+    //     pdf.text('Matching Sources', 20, yPosition)
+    //     yPosition += 10
 
-        results.sources.forEach((source, index) => {
-            // Check if we need a new page
-            if (yPosition > pageHeight - 60) {
-                pdf.addPage()
-                yPosition = 20
-            }
+    //     results.sources.forEach((source, index) => {
+    //         // Check if we need a new page
+    //         if (yPosition > pageHeight - 60) {
+    //             pdf.addPage()
+    //             yPosition = 20
+    //         }
 
-            pdf.setFontSize(12)
-            pdf.setTextColor(102, 126, 234)
-            yPosition = addText(`${index + 1}. ${source.title}`, 20, yPosition, pageWidth - 40, 12)
+    //         pdf.setFontSize(12)
+    //         pdf.setTextColor(102, 126, 234)
+    //         yPosition = addText(`${index + 1}. ${source.title}`, 20, yPosition, pageWidth - 40, 12)
 
-            pdf.setFontSize(10)
-            pdf.setTextColor(0, 0, 0)
-            yPosition = addText(`URL: ${source.url}`, 25, yPosition, pageWidth - 45, 10)
-            yPosition = addText(`Similarity: ${source.similarity}%`, 25, yPosition, pageWidth - 45, 10)
-            yPosition = addText(`Matched Text: "${source.matchedText}"`, 25, yPosition, pageWidth - 45, 10)
-            yPosition += 10
-        })
-    }
+    //         pdf.setFontSize(10)
+    //         pdf.setTextColor(0, 0, 0)
+    //         yPosition = addText(`URL: ${source.url}`, 25, yPosition, pageWidth - 45, 10)
+    //         yPosition = addText(`Similarity: ${source.similarity}%`, 25, yPosition, pageWidth - 45, 10)
+    //         yPosition = addText(`Matched Text: "${source.matchedText}"`, 25, yPosition, pageWidth - 45, 10)
+    //         yPosition += 10
+    //     })
+    // }
 
     // Recommendations
     if (yPosition > pageHeight - 100) {
