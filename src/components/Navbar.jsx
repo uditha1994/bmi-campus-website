@@ -36,11 +36,11 @@ const Navbar = () => {
       <div className="nav-container">
         <Link to="/" className="nav-logo">
           <img
-            src="/logo.png"
+            src="/logo_neww.png"
             alt="BMI Campus"
             className="logo-image"
           />
-          <span className="logo-text">BMI Campus</span>
+          {/* <span className="logo-text">BMI Campus</span> */}
         </Link>
 
         <div className={`nav-menu ${isOpen ? 'active' : ''}`}>

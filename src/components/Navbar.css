@@ -27,7 +27,6 @@
 .nav-logo {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
     text-decoration: none;
     transition: all 0.3s ease;
 }
@@ -36,8 +35,10 @@
     transform: scale(1.05);
 }
 
+/* Updated logo image styles for image-only display */
 .logo-image {
-    height: 45px;
+    height: 50px;
+    /* Increased height for better visibility */
     width: auto;
     object-fit: contain;
     transition: all 0.3s ease;
@@ -45,34 +46,13 @@
 }
 
 .navbar.scrolled .logo-image {
-    height: 35px;
+    height: 40px;
+    /* Slightly smaller when scrolled */
 }
 
+/* Remove logo text styles since we're not using text */
 .logo-text {
-    font-size: 1.8rem;
-    font-weight: bold;
-    background: linear-gradient(45deg, #667eea, #764ba2, #f093fb);
-    background-size: 200% 200%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: gradientShift 3s ease infinite;
-}
-
-.navbar.scrolled .logo-text {
-    font-size: 1.5rem;
-}
-
-@keyframes gradientShift {
-
-    0%,
-    100% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
+    display: none;
 }
 
 .nav-menu {
@@ -103,23 +83,31 @@
     color: white;
 }
 
-/* Alternative styles if you want only image without text */
-.nav-logo.image-only {
-    gap: 0;
+/* Enhanced hover effects for logo */
+.nav-logo:hover .logo-image {
+    filter: drop-shadow(0 4px 12px rgba(102, 126, 234, 0.5));
+    transform: scale(1.05);
 }
 
-.nav-logo.image-only .logo-text {
-    display: none;
+/* Logo loading state */
+.logo-image {
+    opacity: 0;
+    animation: logoFadeIn 0.5s ease-in-out forwards;
 }
 
-.nav-logo.image-only .logo-image {
-    height: 50px;
+@keyframes logoFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.navbar.scrolled .nav-logo.image-only .logo-image {
-    height: 40px;
-}
-
+/* Responsive design */
 @media (max-width: 768px) {
     .nav-toggle {
         display: block;
@@ -149,36 +137,77 @@
     }
 
     .logo-image {
-        height: 40px;
+        height: 45px;
     }
 
     .navbar.scrolled .logo-image {
-        height: 30px;
-    }
-
-    .logo-text {
-        font-size: 1.5rem;
-    }
-
-    .navbar.scrolled .logo-text {
-        font-size: 1.3rem;
+        height: 35px;
     }
 }
 
 @media (max-width: 480px) {
-    .logo-text {
-        font-size: 1.3rem;
-    }
-
-    .navbar.scrolled .logo-text {
-        font-size: 1.1rem;
-    }
-
     .logo-image {
-        height: 35px;
+        height: 40px;
     }
 
     .navbar.scrolled .logo-image {
-        height: 28px;
+        height: 32px;
     }
+
+    .nav-container {
+        padding: 0 15px;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .logo-image {
+        filter: contrast(1.2) drop-shadow(0 2px 8px rgba(102, 126, 234, 0.5));
+    }
+}
+
+/* Dark mode enhancements */
+@media (prefers-color-scheme: dark) {
+    .logo-image {
+        filter: brightness(1.1) drop-shadow(0 2px 8px rgba(102, 126, 234, 0.4));
+    }
+}
+
+/* Print styles */
+@media print {
+    .navbar {
+        background: white !important;
+        border-bottom: 1px solid #ccc !important;
+    }
+
+    .logo-image {
+        filter: none !important;
+    }
+}
+
+/* Focus styles for accessibility */
+.nav-logo:focus {
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+.nav-logo:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Loading fallback */
+.logo-image:not([src]) {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+.logo-image:not([src])::before {
+    content: "BMI";
 }
