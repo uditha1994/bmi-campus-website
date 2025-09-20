@@ -6,6 +6,7 @@ import About from './pages/About'
 import Contact from './pages/Contact'
 import Gallery from './pages/Gallery'
 import Courses from './pages/Courses'
+import PlagiarismChecker from './pages/PlagiarismChecker' // New import
 import './App.css'
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Route path="/courses" element={<Courses />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/gallery" element={<Gallery />} />
+          <Route path="/plagiarism-checker" element={<PlagiarismChecker />} />
         </Routes>
       </div>
     </Router>
