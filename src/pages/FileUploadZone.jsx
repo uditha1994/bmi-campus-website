@@ -1,3 +1,5 @@
+// 
+
 import React from 'react'
 import { useDropzone } from 'react-dropzone'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -7,11 +9,12 @@ import {
     File,
     X,
     CheckCircle,
-    AlertCircle
+    AlertCircle,
+    RefreshCw
 } from 'lucide-react'
 import './FileUploadZone.css'
 
-const FileUploadZone = ({ onFileUpload, files, onRemoveFile }) => {
+const FileUploadZone = ({ onFileUpload, files, onRemoveFile, processedFiles }) => {
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop: onFileUpload,
         accept: {
@@ -36,6 +39,29 @@ const FileUploadZone = ({ onFileUpload, files, onRemoveFile }) => {
         if (type.includes('pdf')) return <File size={20} />
         if (type.includes('word') || type.includes('document')) return <FileText size={20} />
         return <FileText size={20} />
+    }
+
+    const getFileStatus = (fileId) => {
+        const processedFile = processedFiles.find(pf => pf.id === fileId)
+        return processedFile || files.find(f => f.id === fileId)
+    }
+
+    const getStatusIcon = (status) => {
+        switch (status) {
+            case 'ready':
+                return <CheckCircle size={16} className="status-icon success" />
+            case 'processing':
+                return <RefreshCw size={16} className="status-icon processing spinning" />
+            case 'error':
+                return <AlertCircle size={16} className="status-icon error" />
+            default:
+                return <CheckCircle size={16} className="status-icon success" />
+        }
+    }
+
+    const getWordCount = (fileId) => {
+        const processedFile = processedFiles.find(pf => pf.id === fileId)
+        return processedFile?.processedData?.wordCount || 0
     }
 
     return (
@@ -85,36 +111,73 @@ const FileUploadZone = ({ onFileUpload, files, onRemoveFile }) => {
                     >
                         <h4>Uploaded Files ({files.length})</h4>
                         <div className="files-list">
-                            {files.map((fileItem) => (
-                                <motion.div
-                                    key={fileItem.id}
-                                    className="file-item"
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: 20 }}
-                                    layout
-                                >
-                                    <div className="file-info">
-                                        <div className="file-icon">
-                                            {getFileIcon(fileItem.type)}
-                                        </div>
-                                        <div className="file-details">
-                                            <span className="file-name">{fileItem.name}</span>
-                                            <span className="file-size">{formatFileSize(fileItem.size)}</span>
-                                        </div>
-                                    </div>
+                            {files.map((fileItem) => {
+                                const fileStatus = getFileStatus(fileItem.id)
+                                const wordCount = getWordCount(fileItem.id)
 
-                                    <div className="file-status">
-                                        <CheckCircle size={16} className="status-icon success" />
-                                        <button
-                                            className="remove-btn"
-                                            onClick={() => onRemoveFile(fileItem.id)}
-                                        >
-                                            <X size={16} />
-                                        </button>
-                                    </div>
-                                </motion.div>
-                            ))}
+                                return (
+                                    <motion.div
+                                        key={fileItem.id}
+                                        className={`file-item ${fileStatus.status}`}
+                                        initial={{ opacity: 0, x: -20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        exit={{ opacity: 0, x: 20 }}
+                                        layout
+                                    >
+                                        <div className="file-info">
+                                            <div className="file-icon">
+                                                {getFileIcon(fileItem.type)}
+                                            </div>
+                                            <div className="file-details">
+                                                <span className="file-name">{fileItem.name}</span>
+                                                <div className="file-meta">
+                                                    <span className="file-size">{formatFileSize(fileItem.size)}</span>
+                                                    {wordCount > 0 && (
+                                                        <span className="word-count">{wordCount.toLocaleString()} words</span>
+                                                    )}
+                                                </div>
+                                                {fileStatus.status === 'error' && (
+                                                    <span className="error-message">{fileStatus.error}</span>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        <div className="file-status">
+                                            {getStatusIcon(fileStatus.status)}
+                                            <button
+                                                className="remove-btn"
+                                                onClick={() => onRemoveFile(fileItem.id)}
+                                                disabled={fileStatus.status === 'processing'}
+                                            >
+                                                <X size={16} />
+                                            </button>
+                                        </div>
+                                    </motion.div>
+                                )
+                            })}
+                        </div>
+
+                        {/* Summary */}
+                        <div className="files-summary">
+                            <div className="summary-item">
+                                <span className="summary-label">Total Files:</span>
+                                <span className="summary-value">{files.length}</span>
+                            </div>
+                            <div className="summary-item">
+                                <span className="summary-label">Total Words:</span>
+                                <span className="summary-value">
+                                    {processedFiles
+                                        .filter(f => f.status === 'ready')
+                                        .reduce((total, f) => total + (f.processedData?.wordCount || 0), 0)
+                                        .toLocaleString()}
+                                </span>
+                            </div>
+                            <div className="summary-item">
+                                <span className="summary-label">Ready to Check:</span>
+                                <span className="summary-value">
+                                    {processedFiles.filter(f => f.status === 'ready').length}
+                                </span>
+                            </div>
                         </div>
                     </motion.div>
                 )}
