@@ -23,7 +23,7 @@ const Navbar = () => {
     { name: 'Courses', path: '/courses' },
     { name: 'Gallery', path: '/gallery' },
     { name: 'Contact', path: '/contact' },
-    { name: 'Checker', path: '/plagiarism-checker' }
+    { name: 'Checker', path: 'https://bmi-plagiarism.vercel.app' }
   ]
 
   return (

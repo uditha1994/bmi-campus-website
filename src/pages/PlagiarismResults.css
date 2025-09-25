@@ -1045,3 +1045,360 @@
         padding: 0.8rem;
     }
 }
+
+/* Add these new styles to the existing CSS */
+
+.turnitin-style {
+    background: rgba(255, 255, 255, 0.98);
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.turnitin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #0066cc, #004499);
+    color: white;
+    border-radius: 15px 15px 0 0;
+    margin: -2rem -2rem 2rem -2rem;
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.header-actions .action-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+.header-actions .action-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.submission-info {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.submission-info h4 {
+    color: #0066cc;
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.8rem;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+}
+
+.detail-item .label {
+    font-weight: 600;
+    color: #666;
+}
+
+.detail-item .value {
+    color: #333;
+}
+
+.dual-score-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.score-card {
+    background: white;
+    border: 2px solid;
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.score-card.success {
+    border-color: #28a745;
+}
+
+.score-card.warning {
+    border-color: #ffc107;
+}
+
+.score-card.danger {
+    border-color: #dc3545;
+}
+
+.score-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: #666;
+}
+
+.score-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.score-card .score-percentage {
+    font-size: 2.5rem;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.score-card.success .score-percentage {
+    color: #28a745;
+}
+
+.score-card.warning .score-percentage {
+    color: #ffc107;
+}
+
+.score-card.danger .score-percentage {
+    color: #dc3545;
+}
+
+.score-card .score-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.score-card.success .score-icon {
+    color: #28a745;
+}
+
+.score-card.warning .score-icon {
+    color: #ffc107;
+}
+
+.score-card.danger .score-icon {
+    color: #dc3545;
+}
+
+.score-card .score-bar {
+    width: 100%;
+    height: 6px;
+    background: #e9ecef;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.score-card.success .score-fill {
+    background: #28a745;
+}
+
+.score-card.warning .score-fill {
+    background: #ffc107;
+}
+
+.score-card.danger .score-fill {
+    background: #dc3545;
+}
+
+.score-card .score-message {
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.turnitin-sources {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.turnitin-sources .sources-header h4 {
+    color: #0066cc;
+    margin: 0;
+}
+
+.turnitin-source {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    background: #f8f9fa;
+    margin-bottom: 1rem;
+}
+
+.source-number {
+    background: #0066cc;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.source-content {
+    flex: 1;
+}
+
+.turnitin-source .source-title {
+    color: #333;
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+}
+
+.turnitin-source .source-url {
+    color: #0066cc;
+    font-size: 0.9rem;
+}
+
+.turnitin-source .similarity-percentage {
+    background: #0066cc;
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.analysis-summary {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.analysis-summary h4 {
+    color: #0066cc;
+    margin: 0 0 1rem 0;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+}
+
+.summary-item {
+    text-align: center;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.summary-metric {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.metric-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #0066cc;
+}
+
+.metric-label {
+    font-size: 0.8rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.turnitin-recommendations {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.turnitin-recommendations h4 {
+    color: #856404;
+    margin: 0 0 1rem 0;
+}
+
+.turnitin-recommendations .recommendation-item {
+    background: white;
+    border: 1px solid #e9ecef;
+    margin-bottom: 0.5rem;
+}
+
+.turnitin-recommendations .recommendation-item.success {
+    background: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.turnitin-recommendations .recommendation-item.warning {
+    background: #fff3cd;
+    border-color: #ffeaa7;
+}
+
+.turnitin-recommendations .recommendation-item.danger {
+    background: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.turnitin-recommendations .recommendation-item.info {
+    background: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+@media (max-width: 768px) {
+    .turnitin-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    .dual-score-section {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-item {
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+
+    .turnitin-source {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

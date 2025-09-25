@@ -1,4 +1,8 @@
 import mammoth from 'mammoth'
+import * as pdfjsLib from 'pdfjs-dist'
+
+// Set up PDF.js worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'public/pdf.worker.min.mjs'
 
 export const processFile = async (file) => {
     const fileType = file.type
@@ -42,29 +46,42 @@ const processTextFile = (file) => {
     })
 }
 
+// IMPROVED PDF PROCESSING using PDF.js
 const processPDFFile = async (file) => {
-    // For PDF processing, we'll use a simple text extraction
-    // In a real application, you'd use a proper PDF parsing library
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader()
-        reader.onload = async (e) => {
-            try {
-                // This is a simplified PDF text extraction
-                // For production, use libraries like pdf-parse or PDF.js
-                const arrayBuffer = e.target.result
-                const text = await extractTextFromPDF(arrayBuffer)
-                resolve({
-                    text: text,
-                    wordCount: countWords(text),
-                    charCount: text.length,
-                    fileName: file.name
-                })
-            } catch (error) {
-                reject(new Error('Failed to extract text from PDF'))
+    return new Promise(async (resolve, reject) => {
+        try {
+            const arrayBuffer = await file.arrayBuffer()
+            const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
+
+            let fullText = ''
+
+            // Extract text from each page
+            for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                const page = await pdf.getPage(pageNum)
+                const textContent = await page.getTextContent()
+
+                // Combine text items from the page
+                const pageText = textContent.items
+                    .map(item => item.str)
+                    .join(' ')
+
+                fullText += pageText + ' '
             }
+
+            // Clean the extracted text
+            const cleanedText = cleanExtractedText(fullText)
+
+            resolve({
+                text: cleanedText,
+                wordCount: countWords(cleanedText),
+                charCount: cleanedText.length,
+                fileName: file.name
+            })
+
+        } catch (error) {
+            console.error('PDF processing error:', error)
+            reject(new Error('Failed to extract text from PDF'))
         }
-        reader.onerror = () => reject(new Error('Failed to read PDF file'))
-        reader.readAsArrayBuffer(file)
     })
 }
 
@@ -75,11 +92,12 @@ const processDocxFile = async (file) => {
             try {
                 const arrayBuffer = e.target.result
                 const result = await mammoth.extractRawText({ arrayBuffer })
-                const text = result.value
+                const cleanedText = cleanExtractedText(result.value)
+
                 resolve({
-                    text: text,
-                    wordCount: countWords(text),
-                    charCount: text.length,
+                    text: cleanedText,
+                    wordCount: countWords(cleanedText),
+                    charCount: cleanedText.length,
                     fileName: file.name
                 })
             } catch (error) {
@@ -92,18 +110,17 @@ const processDocxFile = async (file) => {
 }
 
 const processDocFile = async (file) => {
-    // DOC files are more complex to parse, this is a simplified version
     return new Promise((resolve, reject) => {
         const reader = new FileReader()
         reader.onload = (e) => {
             try {
-                // This is a very basic DOC text extraction
-                // For production, you'd need a proper DOC parser
                 const text = extractTextFromDoc(e.target.result)
+                const cleanedText = cleanExtractedText(text)
+
                 resolve({
-                    text: text,
-                    wordCount: countWords(text),
-                    charCount: text.length,
+                    text: cleanedText,
+                    wordCount: countWords(cleanedText),
+                    charCount: cleanedText.length,
                     fileName: file.name
                 })
             } catch (error) {
@@ -115,48 +132,74 @@ const processDocFile = async (file) => {
     })
 }
 
-const extractTextFromPDF = async (arrayBuffer) => {
-    // Simplified PDF text extraction
-    // In production, use a proper PDF parsing library
-    const uint8Array = new Uint8Array(arrayBuffer)
-    let text = ''
+// UNIFIED TEXT CLEANING FUNCTION
+const cleanExtractedText = (text) => {
+    if (!text) return ''
 
-    // This is a very basic extraction - replace with proper PDF parser
-    for (let i = 0; i < uint8Array.length - 1; i++) {
-        if (uint8Array[i] >= 32 && uint8Array[i] <= 126) {
-            text += String.fromCharCode(uint8Array[i])
-        }
-    }
-
-    // Clean up the extracted text
-    text = text.replace(/[^\w\s.,!?;:'"()-]/g, ' ')
+    return text
+        // Remove extra whitespace and normalize
         .replace(/\s+/g, ' ')
+        // Remove special characters but keep basic punctuation
+        .replace(/[^\w\s.,!?;:'"()-]/g, ' ')
+        // Remove multiple spaces again
+        .replace(/\s+/g, ' ')
+        // Trim
         .trim()
-
-    return text || 'PDF content extracted successfully. Word count calculated from document structure.'
 }
 
 const extractTextFromDoc = (arrayBuffer) => {
-    // Very basic DOC text extraction
+    // Basic DOC text extraction (simplified)
     const uint8Array = new Uint8Array(arrayBuffer)
     let text = ''
+    let currentWord = ''
 
-    for (let i = 0; i < uint8Array.length - 1; i++) {
-        if (uint8Array[i] >= 32 && uint8Array[i] <= 126) {
-            text += String.fromCharCode(uint8Array[i])
+    for (let i = 0; i < uint8Array.length; i++) {
+        const char = uint8Array[i]
+
+        if (char >= 32 && char <= 126) {
+            const charStr = String.fromCharCode(char)
+
+            if (/[a-zA-Z0-9]/.test(charStr)) {
+                currentWord += charStr
+            } else if (currentWord.length > 0) {
+                if (currentWord.length >= 2 && /[a-zA-Z]/.test(currentWord)) {
+                    text += currentWord + ' '
+                }
+                currentWord = ''
+            }
+        } else if (currentWord.length > 0) {
+            if (currentWord.length >= 2 && /[a-zA-Z]/.test(currentWord)) {
+                text += currentWord + ' '
+            }
+            currentWord = ''
         }
     }
 
-    text = text.replace(/[^\w\s.,!?;:'"()-]/g, ' ')
-        .replace(/\s+/g, ' ')
-        .trim()
-
-    return text || 'DOC content extracted successfully. Word count calculated from document structure.'
+    return text
 }
 
+// CONSISTENT WORD COUNTING
 const countWords = (text) => {
     if (!text || typeof text !== 'string') return 0
-    return text.trim().split(/\s+/).filter(word => word.length > 0).length
+
+    // Normalize the text
+    const normalizedText = text
+        .toLowerCase()
+        .replace(/[^\w\s]/g, ' ') // Replace punctuation with spaces
+        .replace(/\s+/g, ' ')     // Multiple spaces to single space
+        .trim()
+
+    if (!normalizedText) return 0
+
+    // Split into words and filter
+    const words = normalizedText.split(' ').filter(word => {
+        return word.length >= 2 &&           // At least 2 characters
+            word.length <= 50 &&          // Not more than 50 characters
+            /[a-zA-Z]/.test(word) &&      // Contains at least one letter
+            !/^\d+$/.test(word)           // Not just numbers
+    })
+
+    return words.length
 }
 
 export { countWords }
